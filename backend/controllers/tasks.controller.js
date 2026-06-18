@@ -1,0 +1,58 @@
+import task from '../models/task.model.js';
+import Board from '../models/board.model.js'
+const taskController = async(req,res)=>{
+    try{
+const {title,description,priority,boardId,assignedTo,dueDate,attachment} = req.body;
+if(!title || !boardId || !assignedTo){
+    return res.status(400).json({
+        message:"Fill all required fields"
+    })
+}
+const board = await Board.findById(boardId);
+if(!board) {
+    return res.status(400).json({
+        message:"Board doesn't exist"
+    })
+}
+const userIsMember = board.members.some(
+    member => member.toString() === req.user._id.toString()
+)
+if(!userIsMember){
+    return res.status(400).json({
+        message:"LoggedIn user is not a member of the board"
+    })
+}
+const assignedIsBoardMember = board.members.some(
+    member => member.toString() === assignedTo
+);
+if(!assignedIsBoardMember){
+    return res.status(400).json({
+message:"Assigned user not member a of the board"
+    });
+}
+
+const newTask  = await task.create({
+    title,
+    description,
+    priority,
+    dueDate,
+    attachment,
+    assignedTo,
+    board:boardId,
+    createdBy:req.user._id
+});
+return res.status(201).json({
+    success:true,
+    message:"Tasks alloted Successfully",
+    task:newTask
+})
+
+    }
+    catch(error){
+    res.status(500).json({
+        message:error.message
+    })
+    }
+}
+
+export default taskController;
