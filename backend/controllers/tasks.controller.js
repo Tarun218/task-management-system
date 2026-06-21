@@ -14,7 +14,7 @@ if(!board) {
         message:"Board doesn't exist"
     })
 }
-const userIsMember = board.members.some(
+const userIsMember = await board.members.some(
     member => member.toString() === req.user._id.toString()
 )
 if(!userIsMember){
@@ -22,7 +22,7 @@ if(!userIsMember){
         message:"LoggedIn user is not a member of the board"
     })
 }
-const assignedIsBoardMember = board.members.some(
+const assignedIsBoardMember = await board.members.some(
     member => member.toString() === assignedTo
 );
 if(!assignedIsBoardMember){
@@ -43,7 +43,7 @@ const newTask  = await task.create({
 });
 return res.status(201).json({
     success:true,
-    message:"Tasks alloted Successfully",
+    message:"Task created successfully",
     task:newTask
 })
 
