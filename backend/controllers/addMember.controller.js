@@ -22,7 +22,7 @@ const addMember = async (req, res) => {
             })
         }
         const alreadyMember = await board.members.some(
-            member => member.toString() === user
+            member => member.toString() === memberId
         )
         if (alreadyMember) {
             return res.status(400).json({

@@ -10,6 +10,13 @@ const updateStatus = async (req, res) => {
                 message: "Task doesn't exist"
             })
         }
+        const isAssigned = task.assignedTo.toString() === req.user._id.toString()
+        const isCreator = task.createdBy.toString() === req.user._id.toString()
+        if(!isAssigned && !isCreator){
+            return res.status(403).json({
+                message:"Not allowed "
+            })
+        }
         const validStatus = ["todo", "inprogress", "done"]
         if (!validStatus.includes(status)) {
             return res.status(400).json({

@@ -3,12 +3,17 @@ const getBoard = async (req, res) => {
     try {
         const { boardId } = req.params
         const board = await Board.findById(boardId)
+        .populate("createdBy","name email")
+        .populate("mmbers","name email")
         if (!board) {
             return res.status(404).json({
                 message: "Borad not found"
             })
         }
-        if (req.user._id.toString() !== board.members.toString()) {
+        const isMember = board.members.some(
+            member => member.toString() === req.user._id.toString()
+        )
+      if(!isMember) {
             return res.status(403).json({
                 message: "Not allowed to acess the board"
             })

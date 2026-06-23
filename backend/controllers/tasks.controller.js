@@ -14,7 +14,7 @@ if(!board) {
         message:"Board doesn't exist"
     })
 }
-const userIsMember = await board.members.some(
+const userIsMember =  board.members.some(
     member => member.toString() === req.user._id.toString()
 )
 if(!userIsMember){
@@ -22,7 +22,7 @@ if(!userIsMember){
         message:"LoggedIn user is not a member of the board"
     })
 }
-const assignedIsBoardMember = await board.members.some(
+const assignedIsBoardMember =  board.members.some(
     member => member.toString() === assignedTo
 );
 if(!assignedIsBoardMember){

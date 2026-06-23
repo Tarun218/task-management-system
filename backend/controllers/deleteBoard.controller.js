@@ -1,4 +1,5 @@
 import Board from '../models/board.model.js'
+import Task from '../models/task.model.js'
 const deleteBoard = async(req , res)=>{
     try{
         const {boardId} = req.params;
@@ -13,6 +14,9 @@ const deleteBoard = async(req , res)=>{
                 message:"User not allowed to delete the board"
             })
         }
+        await Task.deleteMany({
+            board:boardId
+        })
      await   board.deleteOne()
        res.status(200).json({
         message:"Board deleted successfully"

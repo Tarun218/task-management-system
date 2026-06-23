@@ -11,6 +11,12 @@ if(!task){
         message:"Task not found"
     })
 }
+const isCreator = task.createdBy.toString() === req.user._id.toString()
+        if(!isCreator){
+            return res.status(403).json({
+                message:"Not allowed "
+            })
+        }
 await task.deleteOne();
 res.status(200).json({
     message:"Task deleted successfully"
