@@ -4,7 +4,7 @@ import api from '../api/axios'
 import ErrorMessage from '../components/ErrorMessage'
 import Loader from '../components/Loader'
 import AddMemberModal from '../components/AddMemberModal'
-import TaskCard from '../components/TaskCard'
+import TaskColumn from '../components/TaskColumn'
 const Board = () => {
   const { boardId } = useParams()
   const [board, setBoard] = useState({})
@@ -106,25 +106,12 @@ const Board = () => {
             setShowForm={setShowForm}
             setShowAddMember={setShowAddMember} />))}
       </div>
-      <div
-        style={{ display: 'flex', justifyContent: 'space-around', marginTop: '25px', gap:'15px'}}>
-        <div style={{display: 'flex', flexDirection: 'column', justifyContent:'flex-start',alignItems:'center' ,border: '2px solid white', width: '32%', minHeight: '8rem', borderRadius: '8px', padding: '5px' }}>
-          <h3 style={{position:'top'}}>To-Do</h3>
-          {tasks.filter(task => task.status === 'todo').map((task) => (<TaskCard key={task._id} task={task} />))}
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent:'flex-start',alignItems:'center' ,border: '2px solid white', width: '32%', minHeight: '8rem', borderRadius: '8px', padding: '5px' }}>
-          <h3 >In Progress</h3>
-          {tasks.filter(task => task.status === 'inprogress').map((task) => (<TaskCard key={task._id} task={task} />))}
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent:'flex-start',alignItems:'center' ,border: '2px solid white', width: '32%', minHeight: '8rem', borderRadius: '8px', padding: '5px' }}>
-          <h3>Done</h3>
-          {tasks.filter(task => task.status === 'done').map((task) => (<TaskCard key={task._id} task={task} />))}
-        </div>
-
-      </div>
-
-
-
+     <div
+     style={{display:'flex', flexDirection:'row',justifyContent:'space-around' , marginTop:'25px',gap:'15px'}}>
+      <TaskColumn title= "To Do" tasks ={tasks.filter(task =>task.status === "todo")}  />
+     <TaskColumn title= "In Progress" tasks ={tasks.filter(task =>task.status === "inprogress")}  />
+     <TaskColumn title= "Done" tasks ={tasks.filter(task =>task.status === "done")}  />
+     </div>
     </div>
   )
 }
