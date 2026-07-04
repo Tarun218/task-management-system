@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AddMemberModal = ({email, setEmail, addMember, setShowForm}) => {
+const AddMemberModal = ({email, setEmail, addMember, setShowForm, setShowAddMember}) => {
   return (
     <div>
       <form onSubmit={addMember}>
@@ -12,7 +12,7 @@ const AddMemberModal = ({email, setEmail, addMember, setShowForm}) => {
         />
         <button
           type='button'
-          onClick={()=>{setShowForm(false);setEmail("")}}>Cancel
+          onClick={()=>{setShowForm(false);setShowAddMember(false);setEmail("")}}>Cancel
         </button>
         <button
           type='submit' >

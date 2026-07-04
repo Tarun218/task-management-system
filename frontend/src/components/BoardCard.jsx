@@ -1,10 +1,9 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 const BoardCard = ({ board }) => {
     return (
         <div 
         style={{
-    border: "1px solid gray",
+    border: "1px solid white",
     padding: "15px",
     borderRadius: "8px",
     marginBottom: "15px",
