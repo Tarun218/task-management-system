@@ -12,7 +12,7 @@ const Login = () => {
   e.preventDefault();
 setError("")
 try{
-    const res = await api.post('/login',{email, password});
+    const res = await api.post('/auth/login',{email, password});
     console.log(res.data)
     localStorage.setItem("token", res.data.token);
     navigate("/dashboard")
@@ -56,8 +56,9 @@ setError(error.response?.data?.message||"Login failed")
 
     </form>
     {error && (<p style={{color:"red"}}>{error}</p>)}
-    <p>Don't have an account?{" "}</p>
+    <p>Don't have an account?{" "}
     <Link to={"/register"} >Register</Link>
+    </p>
     </div>
   )
 }
