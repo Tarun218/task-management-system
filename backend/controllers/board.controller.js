@@ -28,6 +28,8 @@ const boardController = async (req, res) => {
         })
     }
 }
+
+// get all tasks of the board
 const getBoardTasks = async (req, res) => {
     try {
         const { boardId } = req.params;
