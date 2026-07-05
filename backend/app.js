@@ -10,6 +10,7 @@ import getUser from './controllers/getUser.controller.js';
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use("/uploads",express.static("uploads"))
 app.use('/api/auth/',register);
 app.use('/api/auth/',login);
 app.use('/api/',profile);

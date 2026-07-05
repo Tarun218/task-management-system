@@ -14,15 +14,25 @@ const TaskCard = ({ task }) => {
                 justifyContent: 'center',
             }}>
             <h3>{task.title}</h3>
-            <pre style={{ whiteSpace: 'pre-wrap' }}>
+            <p>
                 {task.description}
-
-                {task.dueDate}
-                {task.assignedTo}
-            </pre>
-
-
-
+            </p>
+            <p>
+                Due Date: {task.dueDate ? (new Date(task.dueDate).toLocaleDateString()) : "Not set"}
+            </p>
+            <p>
+                Assigned To:
+                {task.assignedTo?.name}({task.assignedTo?.email})
+            </p>
+            {task.attachment && (
+                <a
+                    href={`http://localhost:5000/${task.attachment}`}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    View Attachment
+                </a>
+            )}
         </div>
     )
 }
