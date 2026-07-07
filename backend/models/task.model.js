@@ -31,7 +31,11 @@ const taskSchema = new mongoose.Schema({
         required:true
     },
     dueDate:Date,
-    attachment:String
+    attachment:[
+        {
+            type:String
+        }
+    ]
 },
 {
     timestamps:true

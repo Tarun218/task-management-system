@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import BoardContext from '../context/BoardContext'
 
 const TaskCard = ({ task }) => {
+    const { deleteTask, editTask } = useContext(BoardContext)
     return (
         <div
             style={{
@@ -24,15 +26,21 @@ const TaskCard = ({ task }) => {
                 Assigned To:
                 {task.assignedTo?.name}({task.assignedTo?.email})
             </p>
-            {task.attachment && (
-                <a
-                    href={`http://localhost:5000/${task.attachment}`}
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    View Attachment
-                </a>
-            )}
+            {task.attachments?.map((file, index) => (
+                <div key={index}>
+                    <a
+                        href={`http://localhost:5000/${file}`}
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Attachment {index + 1}
+                    </a>
+
+                </div>
+            ))}
+            <button type='button' onClick={() => deleteTask(task._id)} >Delete</button>
+            <button type='button' onClick={() => editTask(task)} >Edit</button>
+
         </div>
     )
 }

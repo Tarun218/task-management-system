@@ -6,6 +6,10 @@ import Loader from '../components/Loader'
 import AddMemberModal from '../components/AddMemberModal'
 import TaskColumn from '../components/TaskColumn'
 import AddTaskModal from '../components/AddTaskModal'
+import BoardContext from '../context/BoardContext'
+import EditTaskModal from '../components/EditTaskModal'
+import RemoveMember from '../components/RemoveMember'
+
 const Board = () => {
   const { boardId } = useParams()
   const [board, setBoard] = useState({})
@@ -24,6 +28,10 @@ const Board = () => {
   const [priority, setPriority] = useState("")
   const [attachment, setAttachment] = useState("")
   const [assignedTo, setAssignedTo] = useState("")
+  const [showEditTask, setShowEditTask] = useState(false)
+  const [selectedTask, setSelectedTask] = useState(null)
+  const [showRemoveMember,setShowRemoveMember]= useState(false)
+  const [noMember, setNoMember]=useState("")
   const getBoard = async () => {
     try {
       const res = await api.get(`/boards/${boardId}`)
@@ -33,12 +41,14 @@ const Board = () => {
     catch (error) {
       setError(error.response?.data?.message || "Unable to load Board")
     }
-    finally {
-      setLoading(false)
-    }
+
   }
 
   const deleteBoard = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete the board?"
+    );
+    if (!confirmDelete) return;
     setError("")
     try {
       await api.delete(`/boards/${boardId}`)
@@ -97,8 +107,10 @@ const Board = () => {
       formData.append("dueDate", dueDate);
 
       if (attachment) {
-    formData.append("attachment", attachment);
-}
+        attachment.forEach((file) => {
+          formData.append("attachments", file)
+        })
+      }
 
       const res = await api.post(
         `/${boardId}/tasks/add`,
@@ -121,69 +133,202 @@ const Board = () => {
     }
   }
 
+  const deleteTask = async (taskId) => {
+    const confirmDeleteTask = window.confirm("Are you sure you want to delete the Task?");
+    if (!confirmDeleteTask) return;
+    setError("")
+    try {
+      await api.delete(`/${boardId}/tasks/${taskId}`)
+      setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId))
+    }
+    catch (error) {
+      setError(error.response?.data?.message || "Couldn't delete Task")
+    }
+  }
+
+  const editTask = (task) => {
+    setSelectedTask(task);
+
+    setTitle(task.title || "");
+    setDescription(task.description || "");
+    setPriority(task.priority || "medium");
+    setAssignedTo(task.assignedTo?.email || "");
+    setDueDate(task.dueDate ? task.dueDate.slice(0, 10) : "");
+    setAttachment([]);
+
+    setShowEditTask(true);
+  };
+  const updateTask = async (e) => {
+    e.preventDefault()
+    setError("")
+    try {
+      const formData = new FormData();
+      formData.append("title", title)
+      formData.append("description", description)
+      formData.append("priority", priority)
+      formData.append("dueDate", dueDate)
+      formData.append("assignedTo", assignedTo)
+      if (attachment) {
+        attachment.forEach((file) => {
+          formData.append("attachments", file)
+        })
+      }
+const res = await api.patch(
+    `/tasks/${selectedTask._id}`,
+    formData,
+    
+)
+      setTasks(prev => prev.map(task => task._id === res.data.task._id ? res.data.task : task));
+      setSelectedTask(null)
+      setShowEditTask(false)
+      setTitle("");
+      setDescription("");
+      setPriority("");
+      setAssignedTo("");
+      setDueDate("");
+      setAttachment([]);
+    }
+    catch (error) {
+      setError(error.response?.data?.message || "Can't update Task")
+    }
+  }
+const removeMember= async(e)=>{
+  setError("")
+  e.preventDefault()
+  if(!noMember){
+    setShowRemoveMember(false)
+    return
+  }
+  const confirmRemove= window.confirm("Do you want to remove the user?")
+  if(!confirmRemove)return;
+  try{
+    const res = await api.delete(`/boards/${boardId}/remove_member`, {
+      data:{
+        member:noMember
+      }
+    });
+    setBoard(res.data.board)
+    setNoMember("")
+    setShowRemoveMember(false)
+
+  }
+  catch(error){
+    setError(error.response?.data?.message || "Can't remove the member")
+  }
+}
   useEffect(() => {
-    getBoard();
-    getTasks();
+    const loadBoard = async () => {
+      await Promise.all([
+        getBoard(),
+        getTasks()
+      ]);
+      setLoading(false)
+    };
+    loadBoard();
   }, [boardId]);
+
   if (loading) {
     return <Loader />;
   }
-  console.log(board);
   return (
-    <div>
-      {error && (<ErrorMessage message={error} />)}
-      <button type='button' onClick={backButton} >Back to Dashboard</button>
-      <h1>{board.title}</h1>
-      <p>{board.description}</p>
-      <p>
-        Due Date :
-        {board.dueDate ? new Date(board.dueDate).toLocaleDateString() : "NA"}
-      </p>
-      Members:
-      <div style={{ display: 'flex', justifyContent: 'left', gap: '15px' }}>
-        {board.members?.map((member) => (<p key={member._id}>{member.name}</p>))}
-      </div>
-      <div style={{ display: 'flex', gap: '15px' }}>
-        <button type='button' onClick={deleteBoard}>Delete Board</button>
-        {!showAddMember ? (<button type='button' onClick={() => {
-          setShowAddMember(true); setShowForm(true);
-          setError("")
-        }}>Add Member</button>) :
-          (showForm && (<AddMemberModal email={email}
-            setEmail={setEmail}
-            addMember={addMember}
-            setShowForm={setShowForm}
-            setShowAddMember={setShowAddMember} />))}
 
-      </div>
+    <BoardContext.Provider
+      value={{
+        board,
+        tasks,
+        setTasks,
+        deleteTask,
+        addMember,
+        newTask,
+        updateTask,
+        editTask,
+        setError
+      }}>
+
       <div>
-        {!addTask ? (<button type='button' onClick={() => {
-          setAddTask(true); setError(""); setAddTaskForm(true)
-        }} >Add Task</button>) : (addTaskForm && (<AddTaskModal title={title} setTitle={setTitle} newTask={newTask}
-          description={description}
-          setDescription={setDescription}
-          priority={priority}
-          setPriority={setPriority}
-          dueDate={dueDate}
-          setDueDate={setDueDate}
-          attachment={attachment}
-          setAttachment={setAttachment}
-          assignedTo={assignedTo}
-          setAssignedTo={setAssignedTo}
-          setAddTaskForm={setAddTaskForm}
-          setAddTask={setAddTask}
-          board={board}
-        />))}
-      </div>
-      <div
-        style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '25px', gap: '15px' }}>
-        <TaskColumn title="To Do" tasks={tasks.filter(task => task.status === "todo")} />
-        <TaskColumn title="In Progress" tasks={tasks.filter(task => task.status === "inprogress")} />
-        <TaskColumn title="Done" tasks={tasks.filter(task => task.status === "done")} />
-      </div>
+        {error && (<ErrorMessage message={error} />)}
+        <button type='button' onClick={backButton} >Back to Dashboard</button>
+        <h1>{board.title}</h1>
+        <p>{board.description}</p>
+        <p>
+          Due Date :
+          {board.dueDate ? new Date(board.dueDate).toLocaleDateString() : "NA"}
+        </p>
+        Members:
+        <div style={{ display: 'flex', justifyContent: 'left', gap: '15px' }}>
+          {board.members?.map((member) => (<p key={member._id}>{member.name}</p>))}
+        </div>
+        <div style={{ display: 'flex', gap: '15px' }}>
+          <button type='button' onClick={deleteBoard}>Delete Board</button>
+          {!showAddMember ? (<button type='button' onClick={() => {
+            setShowAddMember(true); setShowForm(true);
+            setError("")
+          }}>Add Member</button>) :
+            (showForm && (<AddMemberModal email={email}
+              setEmail={setEmail}
+              addMember={addMember}
+              setShowForm={setShowForm}
+              setShowAddMember={setShowAddMember} />))}
 
-      {error && (<ErrorMessage message={error} />)}
-    </div>
+        </div>
+        <div>
+          <button
+          type='button'
+          onClick={()=>setShowRemoveMember(true)}
+          >Remove Member</button>
+          {showRemoveMember && <RemoveMember board={board} noMember={noMember} removeMember={removeMember} setNoMember={setNoMember}  />}
+        </div>
+
+        <div>
+          {!addTask ? (<button type='button' onClick={() => {
+            setAddTask(true); setError(""); setAddTaskForm(true)
+          }} >Add Task</button>) : (addTaskForm && (<AddTaskModal title={title} setTitle={setTitle} newTask={newTask}
+            description={description}
+            setDescription={setDescription}
+            priority={priority}
+            setPriority={setPriority}
+            dueDate={dueDate}
+            setDueDate={setDueDate}
+            attachment={attachment}
+            setAttachment={setAttachment}
+            assignedTo={assignedTo}
+            setAssignedTo={setAssignedTo}
+            setAddTaskForm={setAddTaskForm}
+            setAddTask={setAddTask}
+            board={board}
+          />))}
+        </div>
+        {showEditTask && selectedTask && (
+          <EditTaskModal
+            title={title}
+            setTitle={setTitle}
+            description={description}
+            setDescription={setDescription}
+            priority={priority}
+            setPriority={setPriority}
+            assignedTo={assignedTo}
+            setAssignedTo={setAssignedTo}
+            dueDate={dueDate}
+            setDueDate={setDueDate}
+            attachment={attachment}
+            setAttachment={setAttachment}
+            updateTask={updateTask}
+            setShowEditTask={setShowEditTask}
+            board={board}
+
+          />
+        )}
+        <div
+          style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '25px', gap: '15px' }}>
+          <TaskColumn title="To Do" status="todo" />
+          <TaskColumn title="In Progress" status="inprogress" />
+          <TaskColumn title="Done" status="done" />
+        </div>
+
+
+
+      </div>
+    </BoardContext.Provider>
   )
 }
 

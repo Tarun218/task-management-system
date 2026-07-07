@@ -30,6 +30,7 @@ const removeMember = async (req , res)=>{
    }
     board.members = board.members.filter(person =>person.toString() !== member )
     await board.save()
+    await board.populate("members", "name email")
     res.status(200).json({
         message:"Member removed successfully",
         board

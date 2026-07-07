@@ -4,7 +4,7 @@ import User from '../models/user.model.js'
 const taskController = async(req,res)=>{
     try{
 const {title,description,priority,boardId,assignedTo,dueDate} = req.body;
-const attachment = req.file? req.file.path :"";
+const attachment = req.files? req.files.map((file)=> file.path) :[];
 if(!title || !boardId || !assignedTo){
     return res.status(400).json({
         message:"Fill all required fields"
