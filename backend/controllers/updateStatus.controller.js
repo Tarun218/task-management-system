@@ -10,7 +10,7 @@ const updateStatus = async (req, res) => {
                 message: "Task doesn't exist"
             })
         }
-        const isAssigned = task.assignedTo.toString() === req.user._id.toString()
+        const isAssigned = task.assignedTo === req.user.email
         const isCreator = task.createdBy.toString() === req.user._id.toString()
         if(!isAssigned && !isCreator){
             return res.status(403).json({

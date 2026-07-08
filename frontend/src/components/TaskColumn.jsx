@@ -1,12 +1,18 @@
 import React, { useContext } from 'react'
 import TaskCard from './TaskCard'
 import BoardContext from '../context/BoardContext'
+import { Droppable } from '@hello-pangea/dnd'
 const TaskColumn = ({ title, status }) => {
   const { tasks } = useContext(BoardContext)
   const filteredTasks = tasks.filter((task) => task.status === status);
   return (
 
-    <div style={{
+   <Droppable droppableId={status}>
+   {(provided)=>(
+     <div
+     ref={provided.innerRef}
+     {...provided.droppableProps}
+      style={{
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -17,9 +23,12 @@ const TaskColumn = ({ title, status }) => {
       padding: "10px"
     }}>
       <h3>{title}</h3>
-      {filteredTasks.length === 0 ? (<p>No Tasks</p>) : (filteredTasks.map((task) => (<TaskCard key={task._id} task={task} />)))}
-
+      {filteredTasks.length === 0 ? (<p>No Tasks</p>) : (filteredTasks.map((task,index) => (<TaskCard key={task._id} task={task} index={index}/>)))}
+{provided.placeholder}
     </div>
+   )}
+
+   </Droppable>
   )
 }
 

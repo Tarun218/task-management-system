@@ -9,6 +9,7 @@ import AddTaskModal from '../components/AddTaskModal'
 import BoardContext from '../context/BoardContext'
 import EditTaskModal from '../components/EditTaskModal'
 import RemoveMember from '../components/RemoveMember'
+import { DragDropContext } from '@hello-pangea/dnd'
 
 const Board = () => {
   const { boardId } = useParams()
@@ -216,6 +217,34 @@ const removeMember= async(e)=>{
     setError(error.response?.data?.message || "Can't remove the member")
   }
 }
+const handleDragEnd = async (result) => {
+  if (!result.destination) return;
+
+  const { source, destination, draggableId } = result;
+
+  if (
+    source.droppableId === destination.droppableId &&
+    source.index === destination.index
+  ) {
+    return;
+  }
+  const updatedTasks = tasks.map((task) =>
+    task._id === draggableId
+      ? { ...task, status: destination.droppableId }
+      : task
+  );
+
+  setTasks(updatedTasks);
+
+  try {
+    await api.patch(`/tasks/${draggableId}/status`, {
+      status: destination.droppableId,
+    });
+  } catch (error) {
+    setError(error.response?.data?.message || "Couldn't update status");
+    getTasks();
+  }
+};
   useEffect(() => {
     const loadBoard = async () => {
       await Promise.all([
@@ -318,12 +347,14 @@ const removeMember= async(e)=>{
 
           />
         )}
-        <div
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <div
           style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '25px', gap: '15px' }}>
           <TaskColumn title="To Do" status="todo" />
           <TaskColumn title="In Progress" status="inprogress" />
           <TaskColumn title="Done" status="done" />
         </div>
+        </DragDropContext>
 
 
 
