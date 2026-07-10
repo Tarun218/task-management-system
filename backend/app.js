@@ -6,13 +6,13 @@ import profile from './routes/profile.route.js';
 import board from './routes/board.route.js'
 import task from './routes/tasks.route.js'
 import boardTasks from './routes/getTasks.route.js';
-import getUser from './controllers/getUser.controller.js';
+import getUserRoute from './routes/getUser.route.js'
 const app = express();
 app.use(express.json());
 app.use(cors({
     origin:[
         "http://localhost:5173",
-        "https://task-management-system-ten-murex.vercel.app/"
+        "https://task-management-system-ten-murex.vercel.app"
     ],
     credentials: true
 }
@@ -26,5 +26,5 @@ app.use('/api/',profile);
 app.use('/api/',board);
 app.use('/api/',task);
 app.use('/api/',boardTasks);
-app.use('/api/',getUser);
+app.use('/api/' , getUserRoute);
 export default app;
