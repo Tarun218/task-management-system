@@ -1,4 +1,5 @@
-# 🚀 Multi-User Task Management System
+<div align="center">
+Multi-User Task Management System
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
@@ -10,7 +11,6 @@
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
 
-<div align="center">
 
 ### A Full-Stack MERN Task Collaboration Platform Inspired by Trello
 
