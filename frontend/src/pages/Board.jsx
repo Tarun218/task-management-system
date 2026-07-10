@@ -10,6 +10,8 @@ import BoardContext from '../context/BoardContext'
 import EditTaskModal from '../components/EditTaskModal'
 import RemoveMember from '../components/RemoveMember'
 import { DragDropContext } from '@hello-pangea/dnd'
+import SearchUser from '../components/SearchUser'
+import UserCard from '../components/UserCard'
 
 const Board = () => {
   const { boardId } = useParams()
@@ -31,8 +33,11 @@ const Board = () => {
   const [assignedTo, setAssignedTo] = useState("")
   const [showEditTask, setShowEditTask] = useState(false)
   const [selectedTask, setSelectedTask] = useState(null)
-  const [showRemoveMember,setShowRemoveMember]= useState(false)
-  const [noMember, setNoMember]=useState("")
+  const [showRemoveMember, setShowRemoveMember] = useState(false)
+  const [noMember, setNoMember] = useState("")
+  const [user, setUser] = useState("")
+  const [showUser, setShowUser] = useState(false)
+  const[found, setFound] =useState([])
   const getBoard = async () => {
     try {
       const res = await api.get(`/boards/${boardId}`)
@@ -174,11 +179,11 @@ const Board = () => {
           formData.append("attachments", file)
         })
       }
-const res = await api.patch(
-    `/tasks/${selectedTask._id}`,
-    formData,
-    
-)
+      const res = await api.patch(
+        `/tasks/${selectedTask._id}`,
+        formData,
+
+      )
       setTasks(prev => prev.map(task => task._id === res.data.task._id ? res.data.task : task));
       setSelectedTask(null)
       setShowEditTask(false)
@@ -193,58 +198,79 @@ const res = await api.patch(
       setError(error.response?.data?.message || "Can't update Task")
     }
   }
-const removeMember= async(e)=>{
-  setError("")
-  e.preventDefault()
-  if(!noMember){
-    setShowRemoveMember(false)
-    return
-  }
-  const confirmRemove= window.confirm("Do you want to remove the user?")
-  if(!confirmRemove)return;
-  try{
-    const res = await api.delete(`/boards/${boardId}/remove_member`, {
-      data:{
-        member:noMember
-      }
-    });
-    setBoard(res.data.board)
-    setNoMember("")
-    setShowRemoveMember(false)
+  const removeMember = async (e) => {
+    setError("")
+    e.preventDefault()
+    if (!noMember) {
+      setShowRemoveMember(false)
+      return
+    }
+    const confirmRemove = window.confirm("Do you want to remove the user?")
+    if (!confirmRemove) return;
+    try {
+      const res = await api.delete(`/boards/${boardId}/remove_member`, {
+        data: {
+          member: noMember
+        }
+      });
+      setBoard(res.data.board)
+      setNoMember("")
+      setShowRemoveMember(false)
 
+    }
+    catch (error) {
+      setError(error.response?.data?.message || "Can't remove the member")
+    }
   }
-  catch(error){
-    setError(error.response?.data?.message || "Can't remove the member")
+  const handleDragEnd = async (result) => {
+    if (!result.destination) return;
+
+    const { source, destination, draggableId } = result;
+
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+    const updatedTasks = tasks.map((task) =>
+      task._id === draggableId
+        ? { ...task, status: destination.droppableId }
+        : task
+    );
+
+    setTasks(updatedTasks);
+
+    try {
+      await api.patch(`/tasks/${draggableId}/status`, {
+        status: destination.droppableId,
+      });
+    } catch (error) {
+      setError(error.response?.data?.message || "Couldn't update status");
+      getTasks();
+    }
+  };
+
+
+  const searchUser = async (e) => {
+    e.preventDefault()
+    setError("")
+    try {
+      const res = await api.get('/users/search', {
+        params: {
+          search: user
+        }
+      })
+      setFound(res.data.users)
+      setShowUser(true)
+    }
+    catch (error) {
+      setError(error.response?.data?.message || "Can't find the User")
+    }
   }
-}
-const handleDragEnd = async (result) => {
-  if (!result.destination) return;
 
-  const { source, destination, draggableId } = result;
 
-  if (
-    source.droppableId === destination.droppableId &&
-    source.index === destination.index
-  ) {
-    return;
-  }
-  const updatedTasks = tasks.map((task) =>
-    task._id === draggableId
-      ? { ...task, status: destination.droppableId }
-      : task
-  );
 
-  setTasks(updatedTasks);
-
-  try {
-    await api.patch(`/tasks/${draggableId}/status`, {
-      status: destination.droppableId,
-    });
-  } catch (error) {
-    setError(error.response?.data?.message || "Couldn't update status");
-    getTasks();
-  }
-};
   useEffect(() => {
     const loadBoard = async () => {
       await Promise.all([
@@ -277,6 +303,26 @@ const handleDragEnd = async (result) => {
       <div>
         {error && (<ErrorMessage message={error} />)}
         <button type='button' onClick={backButton} >Back to Dashboard</button>
+
+
+        <SearchUser user={user} setUser={setUser} searchUser={searchUser}  />
+        {showUser?(<button
+        type='button'
+        onClick={()=> setShowUser(false)}>X</button>): null}
+        {showUser && (
+    found.length === 0 ? (
+        <p>No users found</p>
+    ) : (
+        found.map((user) => (
+            <UserCard
+                key={user._id}
+                user={user}
+            />
+        ))
+    )
+)}
+
+
         <h1>{board.title}</h1>
         <p>{board.description}</p>
         <p>
@@ -302,10 +348,10 @@ const handleDragEnd = async (result) => {
         </div>
         <div>
           <button
-          type='button'
-          onClick={()=>setShowRemoveMember(true)}
+            type='button'
+            onClick={() => setShowRemoveMember(true)}
           >Remove Member</button>
-          {showRemoveMember && <RemoveMember board={board} noMember={noMember} removeMember={removeMember} setNoMember={setNoMember}  />}
+          {showRemoveMember && <RemoveMember board={board} noMember={noMember} removeMember={removeMember} setNoMember={setNoMember} />}
         </div>
 
         <div>
@@ -349,11 +395,11 @@ const handleDragEnd = async (result) => {
         )}
         <DragDropContext onDragEnd={handleDragEnd}>
           <div
-          style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '25px', gap: '15px' }}>
-          <TaskColumn title="To Do" status="todo" />
-          <TaskColumn title="In Progress" status="inprogress" />
-          <TaskColumn title="Done" status="done" />
-        </div>
+            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '25px', gap: '15px' }}>
+            <TaskColumn title="To Do" status="todo" />
+            <TaskColumn title="In Progress" status="inprogress" />
+            <TaskColumn title="Done" status="done" />
+          </div>
         </DragDropContext>
 
 

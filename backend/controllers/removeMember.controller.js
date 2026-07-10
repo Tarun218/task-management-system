@@ -3,6 +3,8 @@ const removeMember = async (req , res)=>{
    try{
      const {member} = req.body
     const{boardId} = req.params
+    console.log(req.body);
+console.log(req.params);
     const board = await Board.findById(boardId)
     if(!board){
         return res.status(404).json({

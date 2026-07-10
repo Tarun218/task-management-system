@@ -120,7 +120,7 @@ const Dashboard = () => {
         <p>No boards found.</p>
       ) : (
         boards.map((board) => (
-           <BoardCard board= {board} />
+           <BoardCard key={board._id} board= {board} />
         ))
       )}
     </div>
