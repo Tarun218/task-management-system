@@ -19,6 +19,8 @@ Secure • Multi-User • Role-Based • RESTful • Responsive
 ![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge)
 ![Made with Love](https://img.shields.io/badge/Made%20with-❤️-red?style=for-the-badge)
 
+---
+
 [![Frontend](https://img.shields.io/badge/Live-Frontend-blue?style=for-the-badge)](https://task-management-system-ten-murex.vercel.app/)
 [![Backend](https://img.shields.io/badge/Live-Backend-green?style=for-the-badge)](https://task-management-system-35vu.onrender.com)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge)](https://github.com/Tarun218/task-management-system)
