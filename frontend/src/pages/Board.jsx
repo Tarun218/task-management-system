@@ -37,7 +37,7 @@ const Board = () => {
   const [noMember, setNoMember] = useState("")
   const [user, setUser] = useState("")
   const [showUser, setShowUser] = useState(false)
-  const[found, setFound] =useState([])
+  const [found, setFound] = useState([])
   const getBoard = async () => {
     try {
       const res = await api.get(`/boards/${boardId}`)
@@ -300,79 +300,355 @@ const Board = () => {
         setError
       }}>
 
-      <div>
-        {error && (<ErrorMessage message={error} />)}
-        <button type='button' onClick={backButton} >Back to Dashboard</button>
+      <div style={{
+    minHeight: "100vh",
+    padding: "35px",
+    background:
+        "linear-gradient(135deg,#e0f2fe,#dbeafe,#eef2ff)",
+    fontFamily: "Segoe UI",
+}}
+      >
+        {error && <ErrorMessage message={error} />}
 
+        {/* Header */}
 
-        <SearchUser user={user} setUser={setUser} searchUser={searchUser}  />
-        {showUser?(<button
-        type='button'
-        onClick={()=> setShowUser(false)}>X</button>): null}
-        {showUser && (
-    found.length === 0 ? (
-        <p>No users found</p>
-    ) : (
-        found.map((user) => (
-            <UserCard
-                key={user._id}
-                user={user}
-            />
-        ))
-    )
-)}
-
-
-        <h1>{board.title}</h1>
-        <p>{board.description}</p>
-        <p>
-          Due Date :
-          {board.dueDate ? new Date(board.dueDate).toLocaleDateString() : "NA"}
-        </p>
-        Members:
-        <div style={{ display: 'flex', justifyContent: 'left', gap: '15px' }}>
-          {board.members?.map((member) => (<p key={member._id}>{member.name}</p>))}
-        </div>
-        <div style={{ display: 'flex', gap: '15px' }}>
-          <button type='button' onClick={deleteBoard}>Delete Board</button>
-          {!showAddMember ? (<button type='button' onClick={() => {
-            setShowAddMember(true); setShowForm(true);
-            setError("")
-          }}>Add Member</button>) :
-            (showForm && (<AddMemberModal email={email}
-              setEmail={setEmail}
-              addMember={addMember}
-              setShowForm={setShowForm}
-              setShowAddMember={setShowAddMember} />))}
-
-        </div>
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "30px",
+          }}
+        >
           <button
-            type='button'
-            onClick={() => setShowRemoveMember(true)}
-          >Remove Member</button>
-          {showRemoveMember && <RemoveMember board={board} noMember={noMember} removeMember={removeMember} setNoMember={setNoMember} />}
+            onClick={backButton}
+            style={{
+              padding: "12px 24px",
+              border: "none",
+              borderRadius: "12px",
+              cursor: "pointer",
+              background: "#2563eb",
+              color: "white",
+              fontWeight: "bold",
+              transition: ".3s",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = "#1d4ed8";
+              e.target.style.transform = "scale(1.05)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "#2563eb";
+              e.target.style.transform = "scale(1)";
+            }}
+          >
+            ← Dashboard
+          </button>
+
+          <button
+            onClick={deleteBoard}
+            style={{
+              padding: "12px 24px",
+              border: "none",
+              borderRadius: "12px",
+              background: "#dc2626",
+              color: "white",
+              cursor: "pointer",
+              fontWeight: "bold",
+              transition: ".3s",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = "#b91c1c";
+              e.target.style.transform = "scale(1.05)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "#dc2626";
+              e.target.style.transform = "scale(1)";
+            }}
+          >
+            Delete Board
+          </button>
         </div>
 
-        <div>
-          {!addTask ? (<button type='button' onClick={() => {
-            setAddTask(true); setError(""); setAddTaskForm(true)
-          }} >Add Task</button>) : (addTaskForm && (<AddTaskModal title={title} setTitle={setTitle} newTask={newTask}
-            description={description}
-            setDescription={setDescription}
-            priority={priority}
-            setPriority={setPriority}
-            dueDate={dueDate}
-            setDueDate={setDueDate}
-            attachment={attachment}
-            setAttachment={setAttachment}
-            assignedTo={assignedTo}
-            setAssignedTo={setAssignedTo}
-            setAddTaskForm={setAddTaskForm}
-            setAddTask={setAddTask}
-            board={board}
-          />))}
+        {/* Board Info */}
+
+        <div
+          style={{
+            background: "white",
+            borderRadius: "20px",
+            padding: "30px",
+            boxShadow: "0 10px 35px rgba(0,0,0,.08)",
+            marginBottom: "35px",
+            transition: ".35s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-5px)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+          }}
+        >
+          <h1
+            style={{
+              marginBottom: "15px",
+              color: "#1e3a8a",
+              fontSize: "38px",
+            }}
+          >
+            {board.title}
+          </h1>
+
+          <p
+            style={{
+              color: "#475569",
+              fontSize: "18px",
+              lineHeight: "30px",
+            }}
+          >
+            {board.description}
+          </p>
+
+          <div
+            style={{
+              marginTop: "25px",
+              display: "flex",
+              gap: "50px",
+              flexWrap: "wrap",
+            }}
+          >
+            <div>
+              <span
+                style={{
+                  fontWeight: "bold",
+                  color: "#1e3a8a",
+                }}
+              >
+                Due Date
+              </span>
+
+              <p>
+                {board.dueDate
+                  ? new Date(board.dueDate).toLocaleDateString()
+                  : "N/A"}
+              </p>
+            </div>
+
+            <div>
+              <span
+                style={{
+                  fontWeight: "bold",
+                  color: "#1e3a8a",
+                }}
+              >
+                Members
+              </span>
+
+              <p>{board.members?.length}</p>
+            </div>
+
+            <div>
+              <span
+                style={{
+                  fontWeight: "bold",
+                  color: "#1e3a8a",
+                }}
+              >
+                Tasks
+              </span>
+
+              <p>{tasks.length}</p>
+            </div>
+          </div>
+
+          {/* Members Section */}
+
+          <div
+            style={{
+              background: "white",
+              borderRadius: "20px",
+              marginBottom: "35px",
+            }}
+          >
+            <h2
+              style={{
+                marginBottom: "20px",
+                color: "#1e3a8a",
+              }}
+            >
+              Board Members
+            </h2>
+
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "12px",
+                marginBottom: "25px",
+              }}
+            >
+              {board.members?.map((member) => (
+                <div
+                  key={member._id}
+                  style={{
+                    padding: "12px 20px",
+                    background: "#dbeafe",
+                    color: "#1e40af",
+                    borderRadius: "30px",
+                    fontWeight: "600",
+                    transition: ".3s",
+                    cursor: "default",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-4px)";
+                    e.currentTarget.style.background = "#bfdbfe";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.background = "#dbeafe";
+                  }}
+                >
+                  {member.name}
+                </div>
+              ))}
+            </div>
+
+            {/* Buttons */}
+
+            <div
+              style={{
+                display: "flex",
+                gap: "18px",
+                flexWrap: "wrap",
+              }}
+            >
+              {!showAddMember ? (
+                <button
+                  onClick={() => {
+                    setShowAddMember(true);
+                    setShowForm(true);
+                    setError("");
+                  }}
+                  style={{
+                    padding: "12px 24px",
+                    border: "none",
+                    borderRadius: "12px",
+                    background: "#2563eb",
+                    color: "white",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    transition: ".3s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = "#1d4ed8";
+                    e.target.style.transform = "scale(1.05)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = "#2563eb";
+                    e.target.style.transform = "scale(1)";
+                  }}
+                >
+                  + Add Member
+                </button>
+              ) : (
+                showForm && (
+                  <AddMemberModal
+                    email={email}
+                    setEmail={setEmail}
+                    addMember={addMember}
+                    setShowForm={setShowForm}
+                    setShowAddMember={setShowAddMember}
+                  />
+                )
+              )}
+
+              <button
+                onClick={() => setShowRemoveMember(true)}
+                style={{
+                  padding: "12px 24px",
+                  border: "none",
+                  borderRadius: "12px",
+                  background: "#ef4444",
+                  color: "white",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  transition: ".3s",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "#dc2626";
+                  e.target.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "#ef4444";
+                  e.target.style.transform = "scale(1)";
+                }}
+              >
+                Remove Member
+              </button>
+
+              <button
+                onClick={() => {
+                  setAddTask(true);
+                  setAddTaskForm(true);
+                  setError("");
+                }}
+                style={{
+                  padding: "12px 24px",
+                  border: "none",
+                  borderRadius: "12px",
+                  background: "#10b981",
+                  color: "white",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  transition: ".3s",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "#059669";
+                  e.target.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "#10b981";
+                  e.target.style.transform = "scale(1)";
+                }}
+              >
+                + New Task
+              </button>
+            </div>
+          </div>
+
+          {/* Remove Member */}
+
+          {showRemoveMember && (
+            <RemoveMember
+              board={board}
+              noMember={noMember}
+              setNoMember={setNoMember}
+              removeMember={removeMember}
+            />
+          )}
+
+          {/* Add Task */}
+
+          {addTaskForm && (
+            <AddTaskModal
+              title={title}
+              setTitle={setTitle}
+              description={description}
+              setDescription={setDescription}
+              priority={priority}
+              setPriority={setPriority}
+              dueDate={dueDate}
+              setDueDate={setDueDate}
+              attachment={attachment}
+              setAttachment={setAttachment}
+              assignedTo={assignedTo}
+              setAssignedTo={setAssignedTo}
+              setAddTask={setAddTask}
+              setAddTaskForm={setAddTaskForm}
+              newTask={newTask}
+              board={board}
+            />
+          )}
         </div>
+
         {showEditTask && selectedTask && (
           <EditTaskModal
             title={title}
@@ -394,18 +670,95 @@ const Board = () => {
           />
         )}
         <DragDropContext onDragEnd={handleDragEnd}>
+          <h2
+            style={{
+              marginBottom: "25px",
+              color: "#1e3a8a",
+              fontSize: "32px",
+              fontWeight: "700",
+            }}
+          >
+            Task Board
+          </h2>
+
           <div
-            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '25px', gap: '15px' }}>
-            <TaskColumn title="To Do" status="todo" />
-            <TaskColumn title="In Progress" status="inprogress" />
-            <TaskColumn title="Done" status="done" />
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3,1fr)",
+              gap: "25px",
+              alignItems: "flex-start",
+            }}
+          >
+            <div
+              style={{
+                background: "#eff6ff",
+                borderRadius: "18px",
+                padding: "18px",
+                boxShadow: "0 8px 25px rgba(0,0,0,.08)",
+                transition: ".3s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-6px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0px)";
+              }}
+            >
+              <TaskColumn
+                title="📋 To Do"
+                status="todo"
+              />
+            </div>
+
+            <div
+              style={{
+                background: "#fff7ed",
+                borderRadius: "18px",
+                padding: "18px",
+                boxShadow: "0 8px 25px rgba(0,0,0,.08)",
+                transition: ".3s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-6px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0px)";
+              }}
+            >
+              <TaskColumn
+                title="🚀 In Progress"
+                status="inprogress"
+              />
+            </div>
+
+            <div
+              style={{
+                background: "#ecfdf5",
+                borderRadius: "18px",
+                padding: "18px",
+                boxShadow: "0 8px 25px rgba(0,0,0,.08)",
+                transition: ".3s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-6px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0px)";
+              }}
+            >
+              <TaskColumn
+                title="✅ Done"
+                status="done"
+              />
+            </div>
+
           </div>
         </DragDropContext>
 
 
 
       </div>
-    </BoardContext.Provider>
+    </BoardContext.Provider >
   )
 }
 

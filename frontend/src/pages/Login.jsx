@@ -1,28 +1,30 @@
-import React from 'react'
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import api from '../api/axios';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("")
-  const navigate = useNavigate();
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("")
+    setError("");
+
     try {
-      const res = await api.post('/auth/login', { email, password });
-      console.log(res.data)
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
+
       localStorage.setItem("token", res.data.token);
-      navigate("/dashboard")
-
-
+      navigate("/dashboard");
+    } catch (error) {
+      setError(error.response?.data?.message || "Login Failed");
     }
-    catch (error) {
-      setError(error.response?.data?.message || "Login failed")
-    }
-  }
+  };
 
   return (
     <div
@@ -32,92 +34,211 @@ const Login = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "flex-start",
-        paddingTop: "50px",
-        gap: "70px",
 
         backgroundImage:
-          "linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('https://png.pngtree.com/thumb_back/fh260/background/20240209/pngtree-task-management-business-planning-app-illustration-vector-image_15623958.jpg')",
+          "linear-gradient(rgba(15,23,42,.55),rgba(15,23,42,.55)), url('https://png.pngtree.com/thumb_back/fh260/background/20240209/pngtree-task-management-business-planning-app-illustration-vector-image_15623958.jpg')",
+
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <label
-        style={{ fontSize: '40px', fontFamily: 'cursive', color: 'white', fontWeight: 'bolder' }}>Task Management System</label>
+      <h1
+        style={{
+          marginTop: "40px",
+          color: "white",
+          fontSize: "42px",
+          fontWeight: "700",
+          letterSpacing: "2px",
+          fontFamily: "cursive",
+          transition: "all .4s",
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.color = "#090c37";
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.color = "#f8f8f8";
+        }}
+      >
+        Task Management System
+      </h1>
+
       <div
         style={{
           width: "100%",
           display: "flex",
           justifyContent: "flex-start",
-          paddingLeft: "100px",
-        }}>
+          paddingLeft: "120px",
+          marginTop: "40px",
+        }}
+      >
         <div
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginLeft: '80px',
-            width: "300px",
-            padding: "20px",
-            borderRadius: "20px",
-            background: "rgba(255,255,255,0.15)",
+            width: "360px",
+            padding: "35px",
+            borderRadius: "18px",
+            background: "rgba(255,255,255,.14)",
             backdropFilter: "blur(18px)",
             WebkitBackdropFilter: "blur(18px)",
-            border: "1px solid rgba(255,255,255,0.3)",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+            border: "1px solid rgba(255,255,255,.25)",
+            boxShadow: "0 15px 35px rgba(0,0,0,.35)",
             color: "white",
-            fontFamily: 'cursive'
-          }}>
-          <h1 >Login</h1>
+            transition: "all .35s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-8px)";
+            e.currentTarget.style.boxShadow =
+              "0 20px 45px rgba(0,0,0,.45)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0px)";
+            e.currentTarget.style.boxShadow =
+              "0 15px 35px rgba(0,0,0,.35)";
+          }}
+        >
+          <h2
+            style={{
+              textAlign: "center",
+              marginBottom: "30px",
+              fontSize: "32px",
+              fontFamily: "cursive",
+            }}
+          >
+            Login
+          </h2>
+
           <form onSubmit={handleSubmit}>
             <input
-              style={{ border: '1px solid gray', borderRadius: '5px', height: '25px', width: '200px' }}
-              type='email'
+              type="email"
+              placeholder="Enter Email"
               value={email}
-              placeholder='Enter Email'
-              onChange={
-                (e) => setEmail(e.target.value)
-              }
+              onChange={(e) => setEmail(e.target.value)}
+              style={{
+                width: "100%",
+                height: "45px",
+                marginBottom: "18px",
+                borderRadius: "8px",
+                border: "1px solid rgba(255,255,255,.3)",
+                background: "rgba(255,255,255,.15)",
+                color: "white",
+                paddingLeft: "15px",
+                fontSize: "15px",
+                outline: "none",
+                boxSizing: "border-box",
+                transition: "all .3s ease",
+              }}
+              onFocus={(e) => {
+                e.target.style.border = "1px solid white";
+                e.target.style.background = "rgba(255,255,255,.25)";
+              }}
+              onBlur={(e) => {
+                e.target.style.border =
+                  "1px solid rgba(255,255,255,.3)";
+                e.target.style.background =
+                  "rgba(255,255,255,.15)";
+              }}
             />
-            <br />
-            <br />
-            <input
-              style={{ border: '1px solid gray', borderRadius: '5px', height: '25px', width: '200px' }}
 
-              type='password'
+            <input
+              type="password"
+              placeholder="Enter Password"
               value={password}
-              placeholder='Enter Password'
-              onChange={
-                (e) => setPassword(e.target.value)
-              }
+              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                width: "100%",
+                height: "45px",
+                marginBottom: "20px",
+                borderRadius: "8px",
+                border: "1px solid rgba(255,255,255,.3)",
+                background: "rgba(255,255,255,.15)",
+                color: "white",
+                paddingLeft: "15px",
+                fontSize: "15px",
+                outline: "none",
+                boxSizing: "border-box",
+                transition: "all .3s ease",
+              }}
+              onFocus={(e) => {
+                e.target.style.border = "1px solid white";
+                e.target.style.background = "rgba(255,255,255,.25)";
+              }}
+              onBlur={(e) => {
+                e.target.style.border =
+                  "1px solid rgba(255,255,255,.3)";
+                e.target.style.background =
+                  "rgba(255,255,255,.15)";
+              }}
             />
-            <br />
-            <br />
 
             <button
+              type="submit"
               style={{
-                background: "rgba(255,255,255,0.15)",
-                backdropFilter: "blur(18px)",
-                border: '1px solid gray',
-                borderRadius: '5px',
-                height: '25px',
-                width: '200px'
+                width: "100%",
+                height: "45px",
+                border: "none",
+                borderRadius: "8px",
+                background: "#2563eb",
+                color: "white",
+                fontWeight: "600",
+                fontSize: "16px",
+                cursor: "pointer",
+                transition: "all .3s ease",
               }}
-              type='submit'>
+              onMouseEnter={(e) => {
+                e.target.style.background = "#1d4ed8";
+                e.target.style.transform = "scale(1.03)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "#2563eb";
+                e.target.style.transform = "scale(1)";
+              }}
+            >
               Login
             </button>
-
           </form>
-          {error && (<p style={{ color: "red" }}>{error}</p>)}
-          <p>Don't have an account?{" "}
-            <Link to={"/register"} >Register</Link>
+
+          {error && (
+            <p
+              style={{
+                color: "#ffb4b4",
+                textAlign: "center",
+                marginTop: "15px",
+                fontWeight: "500",
+              }}
+            >
+              {error}
+            </p>
+          )}
+
+          <p
+            style={{
+              textAlign: "center",
+              marginTop: "22px",
+              fontSize: "15px",
+            }}
+          >
+            Don't have an account?{" "}
+            <Link
+              to="/register"
+              style={{
+                color: "#60a5fa",
+                textDecoration: "none",
+                fontWeight: "600",
+                transition: "all .3s",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.color = "white";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.color = "#60a5fa";
+              }}
+            >
+              Register
+            </Link>
           </p>
         </div>
       </div>
     </div>
+  );
+};
 
-  )
-}
-
-export default Login
+export default Login;
