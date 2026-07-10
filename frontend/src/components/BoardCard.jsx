@@ -16,7 +16,7 @@ const BoardCard = ({ board }) => {
             }}
             onMouseEnter={(e) => {
                 e.currentTarget.style.transform =
-                    "translateY(-8px) scale(1.03) rotate(-1deg)";
+                    "translateY(-8px) scale(1.03) ";
                 e.currentTarget.style.boxShadow =
                     "0 22px 45px rgba(37,99,235,.25)";
                 e.currentTarget.style.border =
@@ -25,7 +25,7 @@ const BoardCard = ({ board }) => {
             }}
             onMouseLeave={(e) => {
                 e.currentTarget.style.transform =
-                    "translateY(0) scale(1) rotate(0deg)";
+                    "translateY(0) scale(1) ";
                 e.currentTarget.style.boxShadow =
                     "0 10px 25px rgba(0,0,0,.12)";
                 e.currentTarget.style.border =

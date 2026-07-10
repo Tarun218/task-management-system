@@ -301,12 +301,12 @@ const Board = () => {
       }}>
 
       <div style={{
-    minHeight: "100vh",
-    padding: "35px",
-    background:
-        "linear-gradient(135deg,#e0f2fe,#dbeafe,#eef2ff)",
-    fontFamily: "Segoe UI",
-}}
+        minHeight: "100vh",
+        padding: "35px",
+        background:
+          "linear-gradient(135deg,#e0f2fe,#dbeafe,#eef2ff)",
+        fontFamily: "Segoe UI",
+      }}
       >
         {error && <ErrorMessage message={error} />}
 
@@ -622,6 +622,7 @@ const Board = () => {
               noMember={noMember}
               setNoMember={setNoMember}
               removeMember={removeMember}
+              setShowRemoveMember={setShowRemoveMember}
             />
           )}
 
@@ -669,6 +670,36 @@ const Board = () => {
 
           />
         )}
+        <SearchUser
+          user={user}
+          setUser={setUser}
+          searchUser={searchUser}
+          showUser={showUser}
+          setShowUser={setShowUser}
+        />
+        {
+          showUser && (
+            <div
+              style={{
+                marginBottom: "30px",
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))",
+                gap: "20px",
+              }}
+            >
+              {found.length === 0 ? (
+                <h3>No users found.</h3>
+              ) : (
+                found.map((person) => (
+                  <UserCard
+                    key={person._id}
+                    user={person}
+                  />
+                ))
+              )}
+            </div>
+          )
+        }
         <DragDropContext onDragEnd={handleDragEnd}>
           <h2
             style={{
