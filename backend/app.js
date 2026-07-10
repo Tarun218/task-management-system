@@ -9,7 +9,16 @@ import boardTasks from './routes/getTasks.route.js';
 import getUser from './controllers/getUser.controller.js';
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin:[
+        "http://localhost:5173",
+        "https://task-management-system-ten-murex.vercel.app/"
+    ],
+    credentials: true
+}
+
+
+));
 app.use("/uploads",express.static("uploads"))
 app.use('/api/auth/',register);
 app.use('/api/auth/',login);
