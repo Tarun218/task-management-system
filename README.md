@@ -66,97 +66,55 @@ You can explore the application using the following demo account:
 
 # 📸 Application Screenshots
 
-> Replace the images below after deployment.
-
 ---
 
 ## 🔐 Login Page
 
-<p align="center">
-
-**(Insert Login Screenshot Here)**
-
-</p>
+<img width="1920" height="1080" alt="Screenshot (75)" src="https://github.com/user-attachments/assets/2e634638-9d91-410f-8147-27e3b2b886c5" />
 
 ---
 
 ## 📝 Register Page
 
-<p align="center">
-
-**(Insert Register Screenshot Here)**
-
-</p>
+<img width="1920" height="1080" alt="Screenshot (74)" src="https://github.com/user-attachments/assets/0707c10e-73c8-4220-91e4-386d92238ec2" />
 
 ---
 
 ## 📊 Dashboard
 
-<p align="center">
-
-**(Insert Dashboard Screenshot Here)**
-
-</p>
+<img width="1920" height="1080" alt="Screenshot (78)" src="https://github.com/user-attachments/assets/c26a9828-58a9-425b-a994-028b12f563ac" />
 
 ---
 
 ## 📁 Create Board
 
-<p align="center">
-
-**(Insert Create Board Screenshot Here)**
-
-</p>
+<img width="1920" height="1080" alt="Screenshot (77)" src="https://github.com/user-attachments/assets/a29a3d2f-0ddd-48ad-bf37-e2d66b329b4e" />
 
 ---
 
 ## 📋 Board View
 
-<p align="center">
+<img width="1920" height="1080" alt="Screenshot (80)" src="https://github.com/user-attachments/assets/4c3bd2dc-8ecf-4f7d-bcd9-af3eec7c9d0c" />
 
-**(Insert Board Screenshot Here)**
-
-</p>
 
 ---
 
 ## 👥 Add Members
 
-<p align="center">
+<img width="1920" height="1080" alt="Screenshot (79)" src="https://github.com/user-attachments/assets/76a28448-e6ae-4916-aa19-49e7cfd9acaa" />
 
-**(Insert Add Members Screenshot Here)**
-
-</p>
 
 ---
 
-## ✅ Task Management
+## ✅ Create Task
 
-<p align="center">
-
-**(Insert Task Management Screenshot Here)**
-
-</p>
+<img width="1920" height="1080" alt="Screenshot (81)" src="https://github.com/user-attachments/assets/7e168a5d-382e-47b0-9f09-42f1c4748087" />
 
 ---
 
 ## 🔄 Drag & Drop Task Status
 
-<p align="center">
-
-**(Insert Drag & Drop Screenshot Here)**
-
-</p>
-
----
-
-## 📱 Responsive Layout
-
-<p align="center">
-
-**(Insert Mobile/Desktop Screenshot Here)**
-
-</p>
+<img width="1920" height="1080" alt="Screenshot (83)" src="https://github.com/user-attachments/assets/91f965ef-c680-4689-baeb-b1c4911a68bc" />
 
 ---
 
