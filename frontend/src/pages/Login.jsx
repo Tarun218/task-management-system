@@ -220,7 +220,7 @@ const Login = () => {
             <Link
               to="/register"
               style={{
-                color: "#60a5fa",
+                color: "#071d3a",
                 textDecoration: "none",
                 fontWeight: "600",
                 transition: "all .3s",
@@ -229,7 +229,7 @@ const Login = () => {
                 e.target.style.color = "white";
               }}
               onMouseLeave={(e) => {
-                e.target.style.color = "#60a5fa";
+                e.target.style.color = "#071d3a";
               }}
             >
               Register

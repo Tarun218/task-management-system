@@ -251,7 +251,7 @@ const Register = () => {
             <Link
               to="/"
               style={{
-                color: "#60a5fa",
+                color: "#071d3a",
                 textDecoration: "none",
                 fontWeight: "600",
                 transition: "all .3s"
@@ -262,7 +262,7 @@ const Register = () => {
               }}
 
               onMouseLeave={(e) => {
-                e.target.style.color = "#60a5fa";
+                e.target.style.color = "#071d3a";
               }}
             >
               Login
