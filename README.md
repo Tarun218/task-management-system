@@ -1,4 +1,10 @@
-# 🚀 Multi-User Task Management System
+<div align="center">
+
+#  Multi-User Task Management System
+
+### A Full-Stack MERN Task Collaboration Platform Inspired by Trello
+
+Secure • Multi-User • Role-Based • RESTful • Responsive
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
@@ -9,12 +15,11 @@
 ![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Live-success?style=for-the-badge)
+![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge)
+![Made with Love](https://img.shields.io/badge/Made%20with-❤️-red?style=for-the-badge)
 
-<div align="center">
-
-### A Full-Stack MERN Task Collaboration Platform Inspired by Trello
-
-Secure • Multi-User • Role-Based • RESTful • Responsive
+---
 
 [![Frontend](https://img.shields.io/badge/Live-Frontend-blue?style=for-the-badge)](https://task-management-system-ten-murex.vercel.app/)
 [![Backend](https://img.shields.io/badge/Live-Backend-green?style=for-the-badge)](https://task-management-system-35vu.onrender.com)
