@@ -1,5 +1,15 @@
 # 🚀 Multi-User Task Management System
 
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
+
 <div align="center">
 
 ### A Full-Stack MERN Task Collaboration Platform Inspired by Trello
@@ -39,6 +49,15 @@ https://task-management-system-35vu.onrender.com
 https://github.com/Tarun218/task-management-system
 
 ---
+## 🧪 Demo Account
+
+You can explore the application using the following demo account:
+
+| Email | Password |
+|--------|----------|
+| demo.taskmanager@gmail.com | Demo@123 |
+
+> **Note:** This is a public demo account. Please avoid deleting sample data or changing the password.
 
 # 📸 Application Screenshots
 
